@@ -22,6 +22,17 @@ MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
                        )
 #endif
 {
+    attack = dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Attack"));
+    jassert(attack != nullptr);
+
+    release = dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Release"));
+    jassert(release != nullptr);
+
+    threshold = dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Threshold"));
+    jassert(threshold != nullptr);
+
+    ratio = dynamic_cast<juce::AudioParameterChoice*>(aptvs.getParameter("Ratio"));
+    jassert(ratio != nullptr);
 }
 
 MultiBandCompressorAudioProcessor::~MultiBandCompressorAudioProcessor()
@@ -95,6 +106,13 @@ void MultiBandCompressorAudioProcessor::prepareToPlay (double sampleRate, int sa
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    juce::dsp::ProcessSpec processSpec;
+    processSpec.maximumBlockSize = samplesPerBlock;
+    processSpec.numChannels = getTotalNumOutputChannels();
+    processSpec.sampleRate = sampleRate;
+
+    compressor.prepare(processSpec);
 }
 
 void MultiBandCompressorAudioProcessor::releaseResources()
@@ -144,6 +162,17 @@ void MultiBandCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    compressor.setAttack(attack->get());
+    compressor.setRelease(release->get());
+    compressor.setThreshold(threshold->get());
+    compressor.setRatio(ratio->getCurrentChoiceName().getFloatValue()); 
+
+
+    auto block = juce::dsp::AudioBlock<float>(buffer);
+    auto context = juce::dsp::ProcessContextReplacing<float>(block);
+
+    compressor.process(context);
+
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
@@ -176,12 +205,21 @@ void MultiBandCompressorAudioProcessor::getStateInformation (juce::MemoryBlock& 
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
+    juce::MemoryOutputStream outputStream(destData, true);
+    aptvs.state.writeToStream(outputStream);
 }
 
 void MultiBandCompressorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
+    if (tree.isValid())
+    {
+        aptvs.replaceState(tree);
+    }
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProcessor::createParameterLayout()

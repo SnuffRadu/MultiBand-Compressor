@@ -65,7 +65,7 @@
           uiLastY_Normal="128" uiopen_Normal="1">
     <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="Matkat Music LLC"
             version="1.0.0" file="C:\Users\raduc\OneDrive\Documents\Dizertatie\MultibandCompressor\AudioFilePlayer\Builds\VisualStudio2019\x64\Debug\VST3\AudioFilePlayer.vst3"
-            uniqueId="79fe81c" isInstrument="0" fileTime="184161def6d" infoUpdateTime="18416234443"
+            uniqueId="79fe81c" isInstrument="0" fileTime="184161def6d" infoUpdateTime="1841ed1919f"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="e95d02c7"/>
     <STATE>348.VMjLgLU....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9DyM23BTIISX1UEaho2ZVkUdAAkKAwDUigWRWkEcQ0VTucmUY4BQPYUQLolShUELhsVRxHlXIcEVpUkLXIFNpE1ZQolXuk0UYIVT5EVZUcUXqQiQik2cEE0aucUV3E0UXo2ZVkkXvP0XxE0UZgVQrElZMoWXyETahsVSxHVcIczUSgiQHITUFEVcicDR4QiUiwVVFgzbAICSzomQhkmKt3hKt3hKt3hKt3hKlIUUMQUTPkzUZESQFM1ZQQEV5UjQtDDQlAEMAcEV40zQtDDQ14hK5EjKt3hKt3hKt3hRUACTEEzZh8VVWgkdUYTTmE0UXwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
@@ -78,13 +78,14 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="6" x="0.55375" y="0.5564516129032258" useARA="0">
+  <FILTER uid="6" x="0.55375" y="0.5564516129032258" useARA="0" uiLastX_Normal="142"
+          uiLastY_Normal="454" uiopen_Normal="1">
     <PLUGIN name="MultiBandCompressor" format="VST3" category="Fx" manufacturer="Snuff Mixtudio"
             version="1.0.0" file="C:\Users\raduc\OneDrive\Documents\Dizertatie\MultibandCompressor\MultiBandCompressor Plugin\MultiBandCompressor\Builds\VisualStudio2022\x64\Debug\VST3\MultiBandCompressor.vst3"
-            uniqueId="3a0a62c" isInstrument="0" fileTime="1841611ccac" infoUpdateTime="18416234444"
+            uniqueId="3a0a62c" isInstrument="0" fileTime="1841ed11e17" infoUpdateTime="1841ed191a0"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="e95b2d1e"/>
-    <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
+    <STATE>423.VMjLg3Y....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HyLy3BTEwlXmAiUYoWUrIVdA4hKAAkKTETRUAUSAAkKBolQY4BQtHTQDQzX5UTLXEWPlM1Y2Y0XqEDTtjDTt3hKt3hKt3BTR4RPtPUPIUETMEDTtHjZFkkKDYWPEgTUXo2ZwDlKXcEVxU0UY4BQPIDQt3hKt3hKt3BTBAkKtTETRUDUS4BQl4xaQYjKAoFTAIUUFE1ZEEiXqEjYic1cVM1ZAAkKIAkKt3hKt3hKtnWXtDjKTETRUAUSAAkKBolQY4BQ1ITQPUjV3UULh4FNFElZAY1XmcmUisVPP4RRP4hKt3hKt3hKt3hKt3hKt3hKt3hKt3hKtQUUCUEQTg2ZrM1YQcUVDUjQicVPP4RPHQEY1UTLhkWPP4RPL4hKi4hKt3hKt3hKtXlTU0DUQAURWoULEYzXqEEUXoWQFwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
