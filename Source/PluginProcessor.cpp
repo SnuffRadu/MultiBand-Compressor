@@ -166,9 +166,10 @@ bool MultiBandCompressorAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* MultiBandCompressorAudioProcessor::createEditor()
 {
-    return new MultiBandCompressorAudioProcessorEditor (*this);
+    //return new MultiBandCompressorAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
-
+ 
 //==============================================================================
 void MultiBandCompressorAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
@@ -181,6 +182,48 @@ void MultiBandCompressorAudioProcessor::setStateInformation (const void* data, i
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProcessor::createParameterLayout()
+{
+    using namespace juce;
+    APTVS::ParameterLayout layout;
+    auto attackReleaseRange = NormalisableRange<float>(5, 500, 1, 1);
+    auto ratioChoices = std::vector<double>{ 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 100 };
+    juce::StringArray stringArray;
+
+    for (auto ratio : ratioChoices) 
+    {
+        stringArray.add(juce::String(ratio, 1));
+    }
+
+    layout.add(std::make_unique<AudioParameterFloat>(
+        "Threshold",
+        "Threshold",
+        NormalisableRange<float>(-60, 12, 1, 1), 
+        0));
+
+    layout.add(std::make_unique<AudioParameterFloat>(
+        "Attack",
+        "Attack",
+        attackReleaseRange,
+        50));
+
+    layout.add(std::make_unique<AudioParameterFloat>(
+        "Release",
+        "Release",
+        attackReleaseRange,
+        250));  
+
+    layout.add(std::make_unique<AudioParameterChoice>(
+        "Ratio",
+        "Ratio",
+        stringArray,
+        3));
+
+
+    return layout;
+
 }
 
 //==============================================================================
