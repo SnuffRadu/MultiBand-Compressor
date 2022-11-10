@@ -33,6 +33,9 @@ MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
 
     ratio = dynamic_cast<juce::AudioParameterChoice*>(aptvs.getParameter("Ratio"));
     jassert(ratio != nullptr);
+
+    bypassed = dynamic_cast<juce::AudioParameterBool*>(aptvs.getParameter("Bypassed"));
+    jassert(bypassed != nullptr);
 }
 
 MultiBandCompressorAudioProcessor::~MultiBandCompressorAudioProcessor()
@@ -171,6 +174,8 @@ void MultiBandCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     auto block = juce::dsp::AudioBlock<float>(buffer);
     auto context = juce::dsp::ProcessContextReplacing<float>(block);
 
+    context.isBypassed = bypassed->get();
+
     compressor.process(context);
 
     // This is the place where you'd normally do the guts of your plugin's
@@ -258,6 +263,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProc
         "Ratio",
         stringArray,
         3));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        "Bypassed",
+        "Bypassed",
+        false));
 
 
     return layout;
