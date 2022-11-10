@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+using namespace params;
 
 //==============================================================================
 /**

@@ -9,6 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+using namespace params;
+
 //==============================================================================
 MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -22,25 +24,35 @@ MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
                        )
 #endif
 {
-    compressor.attack = 
-        dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Attack"));
-        jassert(compressor.attack != nullptr);
 
-    compressor.release = 
-        dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Release"));
-        jassert(compressor.release != nullptr);
+    const auto& params = GetParams();
 
-    compressor.threshold = 
-        dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter("Threshold"));
-        jassert(compressor.threshold != nullptr);
+    auto floatHelper = [&aptvs = this->aptvs, &params](auto& param, const auto& paramName)
+    {
+        param =
+            dynamic_cast<juce::AudioParameterFloat*>(aptvs.getParameter(params.at(paramName)));
+            jassert(param != nullptr);
+    };
 
-    compressor.ratio = 
-        dynamic_cast<juce::AudioParameterChoice*>(aptvs.getParameter("Ratio"));
-        jassert(compressor.ratio != nullptr);
+    auto choiceHelper = [&aptvs = this->aptvs, &params](auto& param, const auto& paramName)
+    {
+        param =
+            dynamic_cast<juce::AudioParameterChoice*>(aptvs.getParameter(params.at(paramName)));
+        jassert(param != nullptr);
+    };
 
-    compressor.bypassed = 
-        dynamic_cast<juce::AudioParameterBool*>(aptvs.getParameter("Bypassed"));
-        jassert(compressor.bypassed != nullptr);
+    auto boolHelper = [&aptvs = this->aptvs, &params](auto& param, const auto& paramName)
+    {
+        param =
+            dynamic_cast<juce::AudioParameterBool*>(aptvs.getParameter(params.at(paramName)));
+        jassert(param != nullptr);
+    };
+
+    floatHelper(compressor.attack, Names::attackLowBand);
+    floatHelper(compressor.release, Names::releaseLowBand);
+    floatHelper(compressor.threshold, Names::thresholdLowBand);
+    choiceHelper(compressor.ratio, Names::ratioLowBand);
+    boolHelper(compressor.bypassed, Names::bypassedLowBand);
 }
 
 MultiBandCompressorAudioProcessor::~MultiBandCompressorAudioProcessor()
@@ -229,6 +241,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProc
     auto attackReleaseRange = NormalisableRange<float>(5, 500, 1, 1);
     auto ratioChoices = std::vector<double>{ 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 100 };
     juce::StringArray stringArray;
+    const auto& params = GetParams();
 
     for (auto ratio : ratioChoices) 
     {
@@ -236,32 +249,32 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProc
     }
 
     layout.add(std::make_unique<AudioParameterFloat>(
-        "Threshold",
-        "Threshold",
+        params.at(Names::thresholdLowBand),
+        params.at(Names::thresholdLowBand),
         NormalisableRange<float>(-60, 12, 1, 1), 
         0));
 
     layout.add(std::make_unique<AudioParameterFloat>(
-        "Attack",
-        "Attack",
+        params.at(Names::attackLowBand),
+        params.at(Names::attackLowBand),
         attackReleaseRange,
         50));
 
     layout.add(std::make_unique<AudioParameterFloat>(
-        "Release",
-        "Release",
+        params.at(Names::releaseLowBand),
+        params.at(Names::releaseLowBand),
         attackReleaseRange,
         250));  
 
     layout.add(std::make_unique<AudioParameterChoice>(
-        "Ratio",
-        "Ratio",
+        params.at(Names::ratioLowBand),
+        params.at(Names::ratioLowBand),
         stringArray,
         3));
 
     layout.add(std::make_unique<AudioParameterBool>(
-        "Bypassed",
-        "Bypassed",
+        params.at(Names::bypassedLowBand),
+        params.at(Names::bypassedLowBand),
         false));
 
 
