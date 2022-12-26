@@ -35,8 +35,16 @@ namespace params
         ratioHighBand,
 
         bypassedLowBand,
-        bypassedMidBand,
+        bypassedMidBand, 
         bypassedHighBand,
+
+        muteLowBand,
+        muteMidBand,
+        muteHighBand,
+
+        soloLowBand,
+        soloMidBand,
+        soloHighBand,
 
     };
 
@@ -61,6 +69,12 @@ namespace params
             {bypassedLowBand, "Bypassed Low Band"},
             {bypassedMidBand, "Bypassed Mid Band"},
             {bypassedHighBand, "Bypassed High Band"},
+            {muteLowBand, "Mute Low Band"},
+            {muteMidBand, "Mute Mid Band"},
+            {muteHighBand, "Mute High Band"},
+            {soloLowBand, "Solo Low Band"},
+            {soloMidBand, "Solo Mid Band"},
+            {soloHighBand, "Solo High Band"},
         };
         return params;
     }
@@ -72,6 +86,8 @@ namespace params
         juce::AudioParameterFloat* threshold{ nullptr };
         juce::AudioParameterChoice* ratio{ nullptr };
         juce::AudioParameterBool* bypassed{ nullptr };
+        juce::AudioParameterBool* mute{ nullptr };
+        juce::AudioParameterBool* solo{ nullptr };
 
         void prepare(const juce::dsp::ProcessSpec& spec)
         {

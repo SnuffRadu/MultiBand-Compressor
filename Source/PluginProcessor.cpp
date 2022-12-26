@@ -53,18 +53,24 @@ MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
     floatHelper(lowBandCompressor.threshold,Names::thresholdLowBand);
     choiceHelper(lowBandCompressor.ratio,   Names::ratioLowBand);
     boolHelper(lowBandCompressor.bypassed,  Names::bypassedLowBand);
+    boolHelper(lowBandCompressor.mute,      Names::muteLowBand);
+    boolHelper(lowBandCompressor.solo,      Names::soloLowBand);
 
     floatHelper(midBandCompressor.attack,   Names::attackMidBand);
     floatHelper(midBandCompressor.release,  Names::releaseMidBand);
     floatHelper(midBandCompressor.threshold,Names::thresholdMidBand);
     choiceHelper(midBandCompressor.ratio,   Names::ratioMidBand);
     boolHelper(midBandCompressor.bypassed,  Names::bypassedMidBand);
+    boolHelper(midBandCompressor.mute,      Names::muteMidBand);
+    boolHelper(midBandCompressor.solo,      Names::soloMidBand);
 
     floatHelper(highBandCompressor.attack,   Names::attackHighBand);
     floatHelper(highBandCompressor.release,  Names::releaseHighBand);
     floatHelper(highBandCompressor.threshold,Names::thresholdHighBand);
     choiceHelper(highBandCompressor.ratio,   Names::ratioHighBand);
     boolHelper(highBandCompressor.bypassed,  Names::bypassedHighBand);
+    boolHelper(highBandCompressor.mute,      Names::muteHighBand);
+    boolHelper(highBandCompressor.solo,      Names::soloHighBand);
 
     floatHelper(lowMidCrossover, Names::lowMidCrossoverFreq);
     floatHelper(midHighCrossover, Names::midHighCrossoverFreq);
@@ -279,10 +285,39 @@ void MultiBandCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& 
             inputBuffer.addFrom(i, 0, source, i, 0, ns);
         }
     };
-     
-    addFilterBand(buffer, filterBuffers[0]);
-    addFilterBand(buffer, filterBuffers[1]);
-    addFilterBand(buffer, filterBuffers[2]);
+
+    auto bandsAreSoloed = false;
+    for (auto& compressor : compressors)
+    {
+        if (compressor.solo->get())
+        {
+            bandsAreSoloed = true;
+            break;
+        }
+    }
+
+    if (bandsAreSoloed = true)
+    {
+        for (size_t i = 0; i < compressors.size(); ++i)
+        {
+            auto& compressor = compressors[i];
+            if (compressor.solo->get()) 
+            {
+                addFilterBand(buffer, filterBuffers[i]);
+            }
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < compressors.size(); ++i)
+        {
+            auto& compressor = compressors[i];
+            if (!compressor.mute->get())
+            {
+                addFilterBand(buffer, filterBuffers[i]);
+            }
+        }
+    }
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -432,6 +467,36 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandCompressorAudioProc
     layout.add(std::make_unique<AudioParameterBool>(
         params.at(Names::bypassedHighBand),
         params.at(Names::bypassedHighBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::muteLowBand),
+        params.at(Names::muteLowBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::muteMidBand),
+        params.at(Names::muteMidBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::muteHighBand),
+        params.at(Names::muteHighBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::soloLowBand),
+        params.at(Names::soloLowBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::soloMidBand),
+        params.at(Names::soloMidBand),
+        false));
+
+    layout.add(std::make_unique<AudioParameterBool>(
+        params.at(Names::soloHighBand),
+        params.at(Names::soloHighBand),
         false));
 
     layout.add(std::make_unique<AudioParameterFloat>(
