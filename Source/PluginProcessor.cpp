@@ -72,7 +72,7 @@ MultiBandCompressorAudioProcessor::MultiBandCompressorAudioProcessor()
     LP1.setType(juce::dsp::LinkwitzRileyFilterType::lowpass);
     HP1.setType(juce::dsp::LinkwitzRileyFilterType::highpass);
 
-    AP2 .setType(juce::dsp::LinkwitzRileyFilterType::allpass);
+    AP2.setType(juce::dsp::LinkwitzRileyFilterType::allpass);
 
     LP2.setType(juce::dsp::LinkwitzRileyFilterType::lowpass);
     HP2.setType(juce::dsp::LinkwitzRileyFilterType::highpass);
@@ -172,7 +172,6 @@ void MultiBandCompressorAudioProcessor::prepareToPlay (double sampleRate, int sa
     for (auto& buffer : filterBuffers) 
     {
         buffer.setSize(processSpec.numChannels, samplesPerBlock);
-
     }
 
 }
@@ -266,7 +265,6 @@ void MultiBandCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     for (size_t i = 0; i < filterBuffers.size(); ++i) 
     {
         compressors[i].process(filterBuffers[i]);
-    
     }
 
     auto numSamples = buffer.getNumSamples();
@@ -280,7 +278,6 @@ void MultiBandCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& 
         {
             inputBuffer.addFrom(i, 0, source, i, 0, ns);
         }
-
     };
      
     addFilterBand(buffer, filterBuffers[0]);
