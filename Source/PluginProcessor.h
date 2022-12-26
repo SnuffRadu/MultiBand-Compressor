@@ -153,12 +153,16 @@ namespace params
         APTVS aptvs{ *this, nullptr, "Parameters", createParameterLayout() };
 
     private:
-        CompressorBand compressor;
+        std::array<CompressorBand, 3> compressors;
+        CompressorBand& lowBandCompressor = compressors[0];
+        CompressorBand& midBandCompressor = compressors[1];
+        CompressorBand& highBandCompressor = compressors[2];
+
 
         using Filter = juce::dsp::LinkwitzRileyFilter<float>;
-        Filter LP1, AP2,
-            HP1, LP2,
-                 HP2;
+        Filter  LP1, AP2,
+                HP1, LP2,
+                     HP2;
 
         juce::AudioParameterFloat* lowMidCrossover{ nullptr };
         juce::AudioParameterFloat* midHighCrossover{ nullptr };
