@@ -156,11 +156,14 @@ namespace params
         CompressorBand compressor;
 
         using Filter = juce::dsp::LinkwitzRileyFilter<float>;
-        Filter LP, HP;
+        Filter LP1, AP2,
+            HP1, LP2,
+                 HP2;
 
-        juce::AudioParameterFloat* lowCrossover{ nullptr };
+        juce::AudioParameterFloat* lowMidCrossover{ nullptr };
+        juce::AudioParameterFloat* midHighCrossover{ nullptr };
 
-        std::array<juce::AudioBuffer<float>, 2> filterBuffers;
+        std::array<juce::AudioBuffer<float>, 3> filterBuffers;
 
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MultiBandCompressorAudioProcessor)
